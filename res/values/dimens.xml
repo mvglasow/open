@@ -38,7 +38,7 @@
     <dimen name="login_button_bottom_margin">16dp</dimen>
 
     <!-- fonts -->
-    <dimen name="big">34sp</dimen>
+    <dimen name="big">36sp</dimen>
     <dimen name="medium_2">24sp</dimen>
     <dimen name="medium">21sp</dimen>
     <dimen name="small_2">18sp</dimen>
