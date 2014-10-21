@@ -62,8 +62,8 @@
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
-        <item name="android:textColor">@color/blue</item>
-        <item name="android:textSize">@dimen/big</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textSize">@dimen/big_2</item>
         <item name="android:paddingBottom">@dimen/login_body_margin_vertical</item>
     </style>
 
