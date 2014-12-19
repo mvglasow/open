@@ -301,16 +301,6 @@ public class BaseActivityTest {
     }
 
     @Test
-    public void onOptionsItemSelected_shouldLaunchDataUploadService() throws Exception {
-        activity.toggleDebugMode();
-        MenuItem menuItem = menu.findItem(R.id.upload_traces);
-        activity.onOptionsItemSelected(menuItem);
-        Intent serviceIntent = Robolectric.getShadowApplication().peekNextStartedService();
-        String serviceStarted = serviceIntent.getComponent().getClassName();
-        assertThat(serviceStarted).isEqualTo("com.mapzen.open.core.DataUploadService");
-    }
-
-    @Test
     public void onOptionsItemSelected_shouldHideActionBar() throws Exception {
         activity.showActionBar();
         activity.toggleDebugMode();
@@ -472,60 +462,6 @@ public class BaseActivityTest {
     }
 
     @Test
-    public void onOptionsItemSelected_shouldBeSuccessful() throws Exception {
-        final TestBaseActivity testBaseActivity = (TestBaseActivity) activity;
-        final String expected = "upload successful!";
-        final MockWebServer server = new MockWebServer();
-        MockResponse response = new MockResponse().setBody(expected);
-        server.enqueue(response);
-        server.play();
-
-        testBaseActivity.setDebugDataEndpoint(server.getUrl("/upload.php").toString());
-        activity.toggleDebugMode();
-        MenuItem menuItem = menu.findItem(R.id.phone_home);
-        testBaseActivity.onOptionsItemSelected(menuItem);
-
-        assertThat(getTextOfLatestToast()).isEqualTo(expected);
-        server.shutdown();
-    }
-
-    @Test
-    public void onOptionsItemSelected_shouldNotifyWhenUnsuccessful() throws Exception {
-        final TestBaseActivity testBaseActivity = (TestBaseActivity) activity;
-        final String expected = "Upload failed, please try again later!";
-        final MockWebServer server = new MockWebServer();
-        MockResponse response = new MockResponse().setResponseCode(500);
-        server.enqueue(response);
-        server.play();
-
-        activity.toggleDebugMode();
-        testBaseActivity.setDebugDataEndpoint(server.getUrl("/upload.php").toString());
-        MenuItem menuItem = menu.findItem(R.id.phone_home);
-        testBaseActivity.onOptionsItemSelected(menuItem);
-
-        assertThat(getTextOfLatestToast()).isEqualTo(expected);
-        server.shutdown();
-    }
-
-    @Test
-    public void onOptionsItemSelected_shouldPostDatabaseFile() throws Exception {
-        TestBaseActivity testBaseActivity = (TestBaseActivity) activity;
-        MockWebServer server = new MockWebServer();
-        MockResponse response = new MockResponse();
-        server.enqueue(response);
-        server.play();
-
-        activity.toggleDebugMode();
-        byte[] expected = Files.toByteArray(new File(db.getPath()));
-        testBaseActivity.setDebugDataEndpoint(server.getUrl("/upload.php").toString());
-        MenuItem menuItem = menu.findItem(R.id.phone_home);
-        testBaseActivity.onOptionsItemSelected(menuItem);
-        RecordedRequest request = server.takeRequest();
-        assertThat(request.getBody()).isEqualTo(expected);
-        server.shutdown();
-    }
-
-    @Test
     public void shouldNotifyUserIfLastLocationNotAvailable() throws Exception {
         LocationManager locationManager = (LocationManager)
                 application.getSystemService(LOCATION_SERVICE);
@@ -534,28 +470,6 @@ public class BaseActivityTest {
         shadowOf(locationManager).setLastKnownLocation(GPS_PROVIDER, null);
         invokeOnConnected();
         assertThat(getTextOfLatestToast()).isEqualTo("Waiting for location");
-    }
-
-    @Test
-    public void shouldHaveOSMLogoutOption() throws Exception {
-        Token token = new Token("stuff", "fun");
-        Menu menu = new TestMenu();
-        activity.onCreateOptionsMenu(menu);
-        activity.setAccessToken(token);
-        MenuItem menuItem = menu.findItem(R.id.logout);
-        assertThat(menuItem).isVisible();
-    }
-
-    @Test
-    public void onOptionsItemSelected_shouldLogout() throws Exception {
-        Token token = new Token("stuff", "fun");
-        Menu menu = new TestMenu();
-        activity.onCreateOptionsMenu(menu);
-        activity.setAccessToken(token);
-        MenuItem menuItem = menu.findItem(R.id.logout);
-        assertThat(((MapzenApplication) application).getAccessToken()).isNotNull();
-        activity.onOptionsItemSelected(menuItem);
-        assertThat(((MapzenApplication) application).getAccessToken()).isNull();
     }
 
     @Test

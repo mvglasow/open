@@ -16,8 +16,6 @@ import com.mapzen.open.fragment.ItemFragment;
 import com.mapzen.open.fragment.ItemFragmentTest;
 import com.mapzen.open.fragment.MapFragment;
 import com.mapzen.open.fragment.MapFragmentTest;
-import com.mapzen.open.login.LoginActivity;
-import com.mapzen.open.login.LoginActivityTest;
 import com.mapzen.open.route.DrawPathTask;
 import com.mapzen.open.route.DrawPathTaskTest;
 import com.mapzen.open.route.RouteFragment;
@@ -65,8 +63,6 @@ import static org.mockito.Mockito.when;
                 TestBaseActivity.class,
                 BaseActivity.class,
                 BaseActivityTest.class,
-                LoginActivity.class,
-                LoginActivityTest.class,
                 RouteFragment.class,
                 RouteFragmentTest.class,
                 ItemFragment.class,
@@ -75,8 +71,6 @@ import static org.mockito.Mockito.when;
                 MapFragmentTest.class,
                 RoutePreviewFragment.class,
                 RoutePreviewFragmentTest.class,
-                DataUploadService.class,
-                DataUploadServiceTest.class,
                 PlaceArrayAdapter.class,
                 PlaceArrayAdapterTest.class,
                 AutoCompleteAdapter.class,
@@ -112,10 +106,6 @@ public class TestAppModule {
         Router router = Mockito.spy(getRouter());
         doNothing().when(router).fetch();
         return router;
-    }
-
-    @Provides OAuthRequestFactory provideOAuthRequestFactory() {
-        return new TestOAuthRequestFactory();
     }
 
     @Provides @Singleton PathLayer providePathLayer() {

@@ -46,23 +46,6 @@ public class InitialActivityTest {
     }
 
     @Test
-    public void onCreate_shouldTrackAsLoggedOut() throws Exception {
-        initInitialActivity();
-        JSONObject expectedPayload = new JSONObject();
-        expectedPayload.put(LOGGED_IN_KEY, String.valueOf(false));
-        Mockito.verify(mixpanelAPI).track(eq(INITIAL_LAUNCH), refEq(expectedPayload));
-    }
-
-    @Test
-    public void onCreate_shouldTrackAsLoggedIn() throws Exception {
-        ((MapzenApplication) application).setAccessToken(new Token("hokus", "bogus"));
-        initInitialActivity();
-        JSONObject expectedPayload = new JSONObject();
-        expectedPayload.put(LOGGED_IN_KEY, String.valueOf(true));
-        Mockito.verify(mixpanelAPI).track(eq(INITIAL_LAUNCH), refEq(expectedPayload));
-    }
-
-    @Test
     public void shouldNotBeNull() throws Exception {
         InitialActivity activity = initInitialActivity();
         assertThat(activity).isNotNull();
@@ -72,34 +55,6 @@ public class InitialActivityTest {
     public void shouldNotHaveActionBar() throws Exception {
         InitialActivity activity = initInitialActivity();
         assertThat(activity.getActionBar()).isNull();
-    }
-
-    @Test
-    public void onPreviouslyNotLoggedIn_ShouldOpenLoginActivity() throws Exception {
-        InitialActivity activity = initInitialActivity();
-        String activityStarted = shadowOf(activity).getNextStartedActivity()
-                .getComponent().toString();
-        Assertions.assertThat(activityStarted)
-                .isEqualTo("ComponentInfo{com.mapzen.open/com.mapzen.open.login.LoginActivity}");
-    }
-
-    @Test
-    public void onPreviouslyLoggedIn_ShouldOpenBaseActivity() {
-        simulateLogin();
-        InitialActivity activity = initInitialActivity();
-        String activityStarted = shadowOf(activity).getNextStartedActivity()
-                .getComponent().toString();
-        Assertions.assertThat(activityStarted)
-                .isEqualTo("ComponentInfo{com.mapzen.open/com.mapzen.open.activity.BaseActivity}");
-    }
-
-    @Test
-    public void shouldForwardIntentDataToLoginActivity() throws Exception {
-        String data = "http://maps.example.com/";
-        Intent intent = new Intent();
-        intent.setData(Uri.parse(data));
-        buildActivity(InitialActivity.class).withIntent(intent).create();
-        assertThat(getShadowApplication().getNextStartedActivity()).hasData(data);
     }
 
     @Test
