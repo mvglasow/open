@@ -165,7 +165,6 @@ public class LoginActivity extends Activity implements LoginAdapter.LoginListene
 
     @Override
     public void doLogin() {
-        mixpanelApi.track(LOGIN_BUTTON_CLICK, null);
-        loginRoutine();
+        startBaseActivity();
     }
 }

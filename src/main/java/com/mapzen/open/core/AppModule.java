@@ -18,7 +18,6 @@ import com.mapzen.open.search.PagerResultsFragment;
 import com.mapzen.open.util.DatabaseHelper;
 import com.mapzen.open.util.DebugDataSubmitter;
 import com.mapzen.open.util.Logger;
-import com.mapzen.open.util.SimpleCrypt;
 import com.mapzen.osrm.Router;
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
@@ -111,10 +110,6 @@ public class AppModule {
         StyleDownLoader styleDownLoader = new StyleDownLoader(context);
         styleDownLoader.setHost("http://vector-styles.mapzen.com/");
         return styleDownLoader;
-    }
-
-    @Provides @Singleton SimpleCrypt provideSimpleCrypt() {
-        return new SimpleCrypt();
     }
 
     @Provides @Singleton SQLiteDatabase provideDb() {

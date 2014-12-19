@@ -34,7 +34,6 @@ import com.mapzen.open.util.DebugDataSubmitter;
 import com.mapzen.open.util.DebugDataSubmitterTest;
 import com.mapzen.open.util.Logger;
 import com.mapzen.open.util.LoggerTest;
-import com.mapzen.open.util.SimpleCrypt;
 import com.mapzen.osrm.Router;
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
@@ -145,13 +144,6 @@ public class TestAppModule {
 
     @Provides @Singleton StyleDownLoader provideStyleDownloader() {
         return Mockito.mock(StyleDownLoader.class);
-    }
-
-    @Provides @Singleton SimpleCrypt provideSimpleCrypt() {
-        SimpleCrypt simpleCrypt = mock(SimpleCrypt.class);
-        when(simpleCrypt.encode(anyString())).thenReturn("stuff");
-        when(simpleCrypt.decode(anyString())).thenReturn("stuff");
-        return simpleCrypt;
     }
 
     @Provides @Singleton SQLiteDatabase provideDb() {

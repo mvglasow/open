@@ -3,7 +3,6 @@ package com.mapzen.open;
 import com.mapzen.open.core.AppModule;
 import com.mapzen.open.core.CommonModule;
 import com.mapzen.open.core.OSMApi;
-import com.mapzen.open.util.SimpleCrypt;
 
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.model.Token;
@@ -44,19 +43,12 @@ public class MapzenApplication extends Application {
     public static final String LOG_TAG = "Mapzen: ";
     private String currentSearchTerm = "";
     private OAuthService osmOauthService;
-    @Inject SimpleCrypt simpleCrypt;
 
     @Override
     public void onCreate() {
         super.onCreate();
         graph = ObjectGraph.create(getModules().toArray());
         inject(this);
-        osmOauthService = new ServiceBuilder()
-                .provider(OSMApi.class)
-                .apiKey(simpleCrypt.decode(getString(R.string.osm_key)))
-                .debug()
-                .callback("mapzen://oauth-login/mapzen.com")
-                .apiSecret(simpleCrypt.decode(getString(R.string.osm_secret))).build();
     }
 
     public String[] getColumns() {
@@ -72,13 +64,7 @@ public class MapzenApplication extends Application {
     }
 
     public Token getAccessToken() {
-        Token accessToken = null;
-        SharedPreferences prefs = getSharedPreferences("OAUTH", Context.MODE_PRIVATE);
-        if (!prefs.getString("token", "").isEmpty()) {
-            accessToken = new Token(simpleCrypt.decode(prefs.getString("token", "")),
-                    simpleCrypt.decode(prefs.getString("secret", "")));
-        }
-        return accessToken;
+        return null;
     }
 
     public boolean isLoggedIn() {
@@ -114,8 +100,6 @@ public class MapzenApplication extends Application {
     public void setAccessToken(Token accessToken) {
         SharedPreferences prefs = getSharedPreferences("OAUTH", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("token", simpleCrypt.encode(accessToken.getToken()));
-        editor.putString("secret", simpleCrypt.encode(accessToken.getSecret()));
         editor.commit();
     }
 }
